@@ -10,7 +10,7 @@ npm install react-intercept
 
 ## Usage
 
-```python
+```typescript
 import { intercept } from "react-intercept"
 import { compose } from "ramda"
 
