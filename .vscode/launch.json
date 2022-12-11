@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Watch React Intercept",
+            "runtimeExecutable": "yarn",
+            "runtimeArgs": [
+                "watch"
+            ],
+        }
+    ]
+}

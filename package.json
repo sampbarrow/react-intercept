@@ -1,20 +1,21 @@
 {
-  "name": "react-lazy",
-  "license": "MIT",
-  "version": "0.0.1",
-  "scripts": {
-    "build": "tsc"
-  },
-  "module": "dist/index.js",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "dependencies": {
-    "value-or-factory": "^0.0.1"
-  },
-  "devDependencies": {
-    "@types/react": "^18.0.26"
-  },
-  "files": [
-    "dist"
-  ]
+    "name": "react-lazy",
+    "license": "MIT",
+    "version": "0.0.1",
+    "scripts": {
+        "build": "tsc",
+        "watch": "nodemon -e '*' --watch src --watch package.json --watch tsconfig.json --exec yarn build"
+    },
+    "module": "dist/index.js",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "dependencies": {
+        "value-or-factory": "^0.0.1"
+    },
+    "devDependencies": {
+        "@types/react": "^18.0.26"
+    },
+    "files": [
+        "dist"
+    ]
 }
