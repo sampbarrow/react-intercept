@@ -1,13 +1,13 @@
-import { ComponentType, createElement } from "react"
+import { ComponentType, createElement, Fragment, ReactNode } from "react"
 import { callOrGet, ValueOrFactory } from "value-or-factory"
 
 /**
  * Returns a function that is applied to the next component.
  */
-export function intercept<I extends {}, O extends {}>(mapper: (props: I) => ValueOrFactory<JSX.Element, [ComponentType<O>]>) {
+export function intercept<I extends {}, O extends {}>(mapper: (props: I) => ValueOrFactory<ReactNode, [ComponentType<O>]>) {
     return (component: ComponentType<O>) => {
         return (props: I) => {
-            return callOrGet(mapper(props), component)
+            return createElement(Fragment, { children: callOrGet(mapper(props), component) })
         }
     }
 }
