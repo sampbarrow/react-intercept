@@ -6,9 +6,7 @@ import { callOrGet, ValueOrFactory } from "value-or-factory"
  */
 export function intercept<I extends {}, O extends {}>(mapper: (props: I) => ValueOrFactory<ReactNode, [ComponentType<O>]>) {
     return (component: ComponentType<O>) => {
-        return (props: I) => {
-            return createElement(Fragment, { children: callOrGet(mapper(props), component) })
-        }
+        return (props: I) => createElement(Fragment, { children: callOrGet(mapper(props), component) })
     }
 }
 
@@ -17,8 +15,6 @@ export function intercept<I extends {}, O extends {}>(mapper: (props: I) => Valu
  */
 export function transform<I extends {}, O extends {}>(mapper: (props: I) => O) {
     return (component: ComponentType<O>) => {
-        return (props: I) => {
-            return createElement(component, mapper(props))
-        }
+        return (props: I) => createElement(component, mapper(props))
     }
 }
