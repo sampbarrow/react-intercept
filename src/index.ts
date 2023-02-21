@@ -26,8 +26,12 @@ type InterceptType<P> = {
     type: "transform",
     props: P
 } | {
-    type: "custom",
-    function: (component: ComponentType<P>) => ReactNode
+    type: "wrap",
+    props: P
+    function(component: JSX.Element): ReactNode
+} | {
+    type: "function",
+    function(component: ComponentType<P>): ReactNode
 }
 
 /**
@@ -42,6 +46,9 @@ export function multicept<I extends {}, O extends {}>(mapper: (props: I) => Valu
             }
             else if (result.type === "transform") {
                 return createElement(component, result.props)
+            }
+            else if (result.type === "wrap") {
+                return createElement(Fragment, { children: result.function(createElement(component, result.props)) })
             }
             else {
                 return createElement(Fragment, { children: result.function(component) })
