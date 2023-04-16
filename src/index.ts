@@ -20,38 +20,22 @@ export function transform<I extends {}, O extends {}>(mapper: (props: I) => O) {
 }
 
 type InterceptType<P> = {
-    type: "element",
-    element: ReactNode
+    type: "intercept",
+    render: ValueOrFactory<ReactNode, [ComponentType<P>]>
 } | {
     type: "transform",
     props: P
-} | {
-    type: "wrap",
-    props: P
-    function(component: JSX.Element): ReactNode
-} | {
-    type: "function",
-    function(component: ComponentType<P>): ReactNode
 }
 
-/**
- * Transforms the incoming props and passes them to the next component.
- */
 export function multicept<I extends {}, O extends {}>(mapper: (props: I) => ValueOrFactory<InterceptType<O>, [ComponentType<O>]>) {
     return (component: ComponentType<O>) => {
         return (props: I) => {
             const result = callOrGet(mapper(props), component)
-            if (result.type === "element") {
-                return createElement(Fragment, { children: result.element })
-            }
-            else if (result.type === "transform") {
-                return createElement(component, result.props)
-            }
-            else if (result.type === "wrap") {
-                return createElement(Fragment, { children: result.function(createElement(component, result.props)) })
+            if (result.type === "intercept") {
+                return createElement(Fragment, { children: callOrGet(result.render, component) })
             }
             else {
-                return createElement(Fragment, { children: result.function(component) })
+                return createElement(component, result.props)
             }
         }
     }
