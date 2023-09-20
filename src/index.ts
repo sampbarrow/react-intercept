@@ -19,6 +19,20 @@ export function transform<I extends {}, O extends {}>(mapper: (props: I) => O) {
     }
 }
 
+/**
+ * Wraps the transformed component as a child of another.
+ */
+export const wrapped = <I extends {}, W extends {}>(wrapper: ComponentType<W>, wrapperProps: ValueOrFactory<W, [I]>) => {
+    return (component: ComponentType<I>) => {
+        return (props: I) => {
+            return createElement(wrapper, {
+                ...callOrGet(wrapperProps, props),
+                children: createElement(component, props)
+            })
+        }
+    }
+}
+
 type InterceptType<P> = {
     type: "intercept",
     render: ValueOrFactory<ReactNode, [ComponentType<P>]>
