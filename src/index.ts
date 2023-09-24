@@ -22,7 +22,7 @@ export function transform<I extends {}, O extends {}>(mapper: (props: I) => O) {
 /**
  * Wraps the transformed component as a child of another.
  */
-export const wrapped = <I extends {}, W extends {}>(wrapper: ComponentType<W>, wrapperProps: ValueOrFactory<W, [I]>) => {
+export function wrapped<I extends {}, W extends {}>(wrapper: ComponentType<W>, wrapperProps: ValueOrFactory<W, [I]>) {
     return (component: ComponentType<I>) => {
         return (props: I) => {
             return createElement(wrapper, {
@@ -35,7 +35,7 @@ export const wrapped = <I extends {}, W extends {}>(wrapper: ComponentType<W>, w
 
 type InterceptType<P> = {
     type: "intercept",
-    render: ValueOrFactory<ReactNode, [ComponentType<P>]>
+    element: ValueOrFactory<ReactNode, [ComponentType<P>]>
 } | {
     type: "transform",
     props: P
@@ -46,7 +46,7 @@ export function multicept<I extends {}, O extends {}>(mapper: (props: I) => Valu
         return (props: I) => {
             const result = callOrGet(mapper(props), component)
             if (result.type === "intercept") {
-                return createElement(Fragment, { children: callOrGet(result.render, component) })
+                return createElement(Fragment, { children: callOrGet(result.element, component) })
             }
             else {
                 return createElement(component, result.props)
