@@ -33,19 +33,19 @@ export function wrapped<I extends {}, W extends {}>(wrapper: ComponentType<W>, w
     }
 }
 
-type InterceptType<P> = {
-    type: "intercept",
+type InterceptType<P extends {}> = {
+    type: "replace"
     element: ValueOrFactory<ReactNode, [ComponentType<P>]>
 } | {
-    type: "transform",
+    type: "transform"
     props: P
 }
 
-export function multicept<I extends {}, O extends {}>(mapper: (props: I) => ValueOrFactory<InterceptType<O>, [ComponentType<O>]>) {
+export function multicept<I extends {}, O extends {}>(mapper: (props: I) => InterceptType<O>) {
     return (component: ComponentType<O>) => {
         return (props: I) => {
             const result = callOrGet(mapper(props), component)
-            if (result.type === "intercept") {
+            if (result.type === "replace") {
                 return createElement(Fragment, { children: callOrGet(result.element, component) })
             }
             else {
